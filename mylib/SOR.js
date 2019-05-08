@@ -25,12 +25,11 @@ mySORClass.prototype.generateSOR = function() {
     for (var angle = 0; angle <= 360; angle += 10) {
         radians = ((angle * Math.PI) / 180)
         currentLine = []
-
-        for (var i = 0; i < this.baseLine.length; i++) {
-            var currentCoords = this.baseLine[i]
-            x = (Math.cos(radians) * currentCoords.x) - (Math.sin(radians) * currentCoords.z);
-            y = currentCoords.y;
-            z = (Math.cos(radians) * currentCoords.z) + (Math.sin(radians) * currentCoords.x);
+        for (var i = 0; i < this.baseLine.length; i=i+3) {
+            this.baseLine[i]
+            x = (Math.cos(radians) * this.baseLine[i]) - (Math.sin(radians) * this.baseLine[i+2]);
+            y = this.baseLine[i+1];
+            z = (Math.cos(radians) * this.baseLine[i+2]) + (Math.sin(radians) * this.baseLine[i]);
             currentLine.push(new coord(x, y, z));
         }
         shape.push(currentLine)
@@ -40,15 +39,11 @@ mySORClass.prototype.generateSOR = function() {
 
 mySORClass.prototype.calcVertices = function() {
     var vertices = []
-    for(i = 0; i < this.shape[0].length-1; i++) {
-        for(j = 0; j < this.shape.length-1; j++){
-            var currentLine = this.shape[j];
-            var nextLine = this.shape[j+1];
-
-            vertices.push(currentLine[i].x, currentLine[i].y, currentLine[i].z);
-            vertices.push(currentLine[i + 1].x, currentLine[i + 1].y, currentLine[i + 1].z);
-            vertices.push(nextLine[i + 1].x, nextLine[i + 1].y, nextLine[i + 1].z);
-            vertices.push(nextLine[i].x, nextLine[i].y, nextLine[i].z);
+    for(i = 0; i < this.shape.length; i++) {
+        for(j = 0; j < this.shape[0].length; j++){
+            vertices.push(this.shape[i][j].x)
+            vertices.push(this.shape[i][j].y)
+            vertices.push(this.shape[i][j].z)
         }
     }
     return vertices;
@@ -56,12 +51,11 @@ mySORClass.prototype.calcVertices = function() {
 
 mySORClass.prototype.calcIndices = function() {
     var indices = []
-    var index = 0
-    for (var i = 0; i < this.shape[0].length - 1; i++) {
-        for (j = 0; j < this.shape.length - 1; j++) {
-            indices.push(index, index + 1, index + 2);
-            indices.push(index, index + 2, index + 3);
-            index = index + 4;
+    var lineSize = this.shape[0].length
+    for (var i = 0; i < this.shape.length; i++) {
+        for (j = 0; j < lineSize - 1 ; j++) {
+            indices.push(i*lineSize+j,i*lineSize+j+1,(i+1)*lineSize+j+1);
+            indices.push(i*lineSize+j,(i+1)*lineSize+j+1,(i+1)*lineSize+j);
         }
     }
     return indices;

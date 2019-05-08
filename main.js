@@ -58,9 +58,6 @@ function drawModeClick(ev, gl, canvas) {
     var button = ev.button; // 0 if left click, 2 if right click
     var rect = ev.target.getBoundingClientRect();
     
-    // Print the numerical representation of what button was pressed
-    console.log(button);
-    
     x = ((x - rect.left) - canvas.width / 2) * 2;
     y = (canvas.height / 2 - (y - rect.top)) * 2;
     
@@ -71,7 +68,6 @@ function drawModeClick(ev, gl, canvas) {
     
     // If right click
     if (button == 2) {
-        console.log(newSORPoints);
         penDown = 0;
         drawMode = false;
         var testLine = new lineStrip(newSORPoints, [.5,.5,.5,1.0])
