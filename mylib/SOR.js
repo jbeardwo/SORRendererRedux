@@ -52,7 +52,7 @@ mySORClass.prototype.calcVertices = function() {
 mySORClass.prototype.calcIndices = function() {
     var indices = []
     var lineSize = this.shape[0].length
-    for (var i = 0; i < this.shape.length; i++) {
+    for (var i = 0; i < this.shape.length - 1; i++) {
         for (j = 0; j < lineSize - 1 ; j++) {
             indices.push(i*lineSize+j,i*lineSize+j+1,(i+1)*lineSize+j+1);
             indices.push(i*lineSize+j,(i+1)*lineSize+j+1,(i+1)*lineSize+j);
@@ -75,10 +75,6 @@ mySORClass.prototype.draw = function() {
     drawVerts = Float32Array.from(this.vertices);
     drawIndices = Uint16Array.from(this.indices);
 
-    for (var i = 0; i < drawVerts.length; i++) {
-        drawVerts[i] = drawVerts[i] * 500
-    }
-
     initArrayBuffer(gl, drawVerts, 3, gl.FLOAT, 'a_Position', program)
 
     var indexBuffer = gl.createBuffer()
@@ -92,7 +88,7 @@ mySORClass.prototype.draw = function() {
 
     gl.enable(gl.DEPTH_TEST)
     var mvpMatrix = new Matrix4()
-        mvpMatrix.setOrtho(-500, 500, -500, 500, -500, 500)
+    mvpMatrix.setOrtho(-500, 500, -500, 500, -500, 500)
 
     gl.uniformMatrix4fv(u_MvpMatrix, false, mvpMatrix.elements)
     gl.drawElements(gl.TRIANGLES, drawIndices.length, gl.UNSIGNED_SHORT, 0)
