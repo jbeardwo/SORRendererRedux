@@ -70,7 +70,7 @@ function drawModeClick(ev, gl, canvas) {
     if (button == 2) {
         penDown = 0;
         drawMode = false;
-        var test = new mySORClass("test",newSORPoints,[.5,.5,.5,1.0]);
+        var test = new mySORClass("test",newSORPoints,[0,1,0,1.0]);
         console.log(test);
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
         test.draw();
@@ -100,7 +100,7 @@ function drawModeMove(ev, gl, canvas) {
         vertices[newSORPoints.length] = x;
         vertices[newSORPoints.length + 1] = y;
         vertices[newSORPoints.length + 2] = 0;
-        var SORPreview = new lineStrip(vertices, [0,1.0,0,1.0])
+        var SORPreview = new lineStrip(vertices, [.5,.5,.5,1.0])
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
         SORPreview.draw();
     }

@@ -15,7 +15,7 @@ function mySORClass(name, baseLine, color) {
 
     this.faceNormals = this.calcFaceNormals();
     this.smoothNormals = this.calcSmoothNormals();
-    this.showNormals = false;
+    this.showNormals = true;
 }
 
 mySORClass.prototype.generateSOR = function() {
@@ -75,7 +75,12 @@ mySORClass.prototype.calcFaceNormals = function() {
         for (var j = 0; j < this.shape[0].length - 1; j++) {
             var currentLine = this.shape[i]
             var nextLine = this.shape[i + 1]
-            faceNormals.push(normalize(calculateNormal(currentLine[j], nextLine[j], currentLine[j + 1])))
+            console.log(this.baseLine)
+            if(this.baseLine[j*3+1]>this.baseLine[(j+1)*3+1]){
+                faceNormals.push(normalize(calculateNormal(currentLine[j], nextLine[j], currentLine[j+1])))
+            }else{
+                faceNormals.push(normalize(calculateNormal(currentLine[j], currentLine[j+1], nextLine[j])))
+            }
         }
     }
     return faceNormals
