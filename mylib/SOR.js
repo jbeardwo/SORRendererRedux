@@ -15,7 +15,7 @@ function mySORClass(name, baseLine, color) {
 
     this.faceNormals = this.calcFaceNormals();
     this.smoothNormals = this.calcSmoothNormals();
-    this.showNormals = true;
+    this.showNormals = false;
 }
 
 mySORClass.prototype.generateSOR = function() {
@@ -213,6 +213,7 @@ mySORClass.prototype.draw = function() {
     var drawVerts = [];
     var tempVerts = [];
     var drawIndices = [];
+    var drawNormals = [];
 //convert vertices from coords into a normal array
     for(var i = 0;i<this.vertices.length;i++){
         tempVerts.push(this.vertices[i].x);
@@ -222,13 +223,15 @@ mySORClass.prototype.draw = function() {
 
     drawVerts = Float32Array.from(tempVerts);
     drawIndices = Uint16Array.from(this.indices);
+    drawNormals = vector3ToFloat32(this.smoothNormals);
 
     //Initialize shaders
     program = createProgramFromScripts(gl, "objectShader-vs", "objectShader-fs")
     gl.useProgram(program);
 
 
-    initArrayBuffer(gl, drawVerts, 3, gl.FLOAT, 'a_Position', program)
+    initArrayBuffer(gl, drawVerts, 3, gl.FLOAT, 'a_Position', program);
+    initArrayBuffer(gl, drawNormals, 3, gl.FLOAT, 'a_Normal', program);
 
     var indexBuffer = gl.createBuffer()
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer)

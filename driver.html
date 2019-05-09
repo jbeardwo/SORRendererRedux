@@ -42,6 +42,7 @@
         varying vec4 v_Color;
         void main(){
             gl_FragColor = v_Color;
+
         }
     </script>
 
@@ -49,6 +50,8 @@
     <script id="objectShader-vs" type="x-shader/x-vertex">
       uniform mat4 u_MvpMatrix;
       attribute vec4 a_Position;
+      attribute vec4 a_Normal;
+      varying vec4 v_Normal;
 
       uniform vec4 u_Color;
       varying vec4 v_Color;
@@ -56,6 +59,7 @@
       void main(){
         gl_Position = u_MvpMatrix * a_Position;
         v_Color = u_Color;
+        v_Normal = a_Normal;
       }
     </script>
 
@@ -63,10 +67,19 @@
       #ifdef GL_ES
       precision mediump float;
       #endif
+      varying vec4 v_Normal;
       varying vec4 v_Color;
 
       void main(){
-        gl_FragColor = v_Color;
+        vec3 dirLightDir = vec3(0,0,1);
+        vec4 v_dirLightColor = vec4(1,1,1,1);
+        vec3 normal = normalize(v_Normal.xyz);
+
+        dirLightDir = normalize(dirLightDir);
+        float nDotL = max(dot(dirLightDir,normal),0.0);
+        vec3 dirDiffuse = v_dirLightColor.rgb * v_Color.rgb * nDotL;
+
+        gl_FragColor = vec4(dirDiffuse,v_Color.a);
       }
     </script>
   </body>

@@ -100,7 +100,7 @@ function drawModeMove(ev, gl, canvas) {
         vertices[newSORPoints.length] = x;
         vertices[newSORPoints.length + 1] = y;
         vertices[newSORPoints.length + 2] = 0;
-        var SORPreview = new lineStrip(vertices, [.5,.5,.5,1.0])
+        var SORPreview = new lineStrip(vertices, [0,1.0,0,1.0])
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
         SORPreview.draw();
     }
