@@ -15,6 +15,7 @@ function mySORClass(name, baseLine, color) {
 
     this.faceNormals = this.calcFaceNormals();
     this.smoothNormals = this.calcSmoothNormals();
+    this.showNormals = true;
 }
 
 mySORClass.prototype.generateSOR = function() {
@@ -41,12 +42,16 @@ mySORClass.prototype.generateSOR = function() {
 }
 
 mySORClass.prototype.calcVertices = function() {
+    var x;
+    var y;
+    var z;
     var vertices = []
     for(var i = 0; i < this.shape.length; i++) {
         for(var j = 0; j < this.shape[0].length; j++){
-            vertices.push(this.shape[i][j].x)
-            vertices.push(this.shape[i][j].y)
-            vertices.push(this.shape[i][j].z)
+            x = this.shape[i][j].x
+            y = this.shape[i][j].y
+            z = this.shape[i][j].z
+            vertices.push(new coord(x, y, z));
         }
     }
     return vertices;
@@ -65,24 +70,23 @@ mySORClass.prototype.calcIndices = function() {
 }
 
 mySORClass.prototype.calcFaceNormals = function() {
-    faceNormals = []
+    var faceNormals = [];
     for (var i = 0; i < this.shape.length - 1; i++) {
         for (var j = 0; j < this.shape[0].length - 1; j++) {
             var currentLine = this.shape[i]
             var nextLine = this.shape[i + 1]
-            faceNormals.push(calculateNormal(currentLine[j], currentLine[j + 1], nextLine[j]))
+            faceNormals.push(normalize(calculateNormal(currentLine[j], nextLine[j], currentLine[j + 1])))
         }
     }
-    console.log(faceNormals)
     return faceNormals
 }
 
 
 mySORClass.prototype.calcSmoothNormals = function() {
-    smoothNormals = [];
-    currentNormal = [];
-    addedNormal = [];
-    baseSize = this.baseLine.length/3;
+    var smoothNormals = [];
+    var currentNormal = [];
+    var addedNormal = [];
+    var baseSize = this.baseLine.length/3;
     //Vertex normal for smooth shading is calculating by adding Normals of all adjascent faces
 
 
@@ -92,8 +96,6 @@ mySORClass.prototype.calcSmoothNormals = function() {
     currentNormal = this.faceNormals[0];
     //bottom Left (wraparound)
     addedNormal = this.faceNormals[this.faceNormals.length-(baseSize-1)]
-    console.log(currentNormal)
-    console.log(addedNormal)
     currentNormal = normalize(addVectors(currentNormal,addedNormal));
     smoothNormals.push(currentNormal)
     //This is 2nd through 2nd to last vertex in the first set of vertices
@@ -126,7 +128,7 @@ mySORClass.prototype.calcSmoothNormals = function() {
         //bottom right
         currentNormal = this.faceNormals[baseSize*i-i];
         //bottom left
-        addedNormal = this.faceNormals[baseSize*i-(baseSize/3+(i-1))];
+        addedNormal = this.faceNormals[baseSize*i-(baseSize+(i-1))];
         currentNormal = normalize(addVectors(currentNormal,addedNormal));
         smoothNormals.push(currentNormal);
         //middle of each group
@@ -187,18 +189,44 @@ mySORClass.prototype.calcSmoothNormals = function() {
     return smoothNormals;
 }
 
+mySORClass.prototype.drawNormals = function() {
+    var normalLines = [];
+    var x;
+    var y;
+    var z;
+
+    for(var i = 0;i<this.smoothNormals.length;i++){
+        normalLines.push(this.vertices[i].x);
+        normalLines.push(this.vertices[i].y);
+        normalLines.push(this.vertices[i].z);
+
+        normalLines.push(this.vertices[i].x + 100 * this.smoothNormals[i][0]);
+        normalLines.push(this.vertices[i].y + 100 * this.smoothNormals[i][1]);
+        normalLines.push(this.vertices[i].z + 100 * this.smoothNormals[i][2]);
+    }
+
+    var normalCluster = new lineCluster(normalLines,[1.0,0.0,0.0,1.0]);
+    normalCluster.draw();
+}
 
 mySORClass.prototype.draw = function() {
-    var drawVerts = []
-    var drawIndices = []
+    var drawVerts = [];
+    var tempVerts = [];
+    var drawIndices = [];
+//convert vertices from coords into a normal array
+    for(var i = 0;i<this.vertices.length;i++){
+        tempVerts.push(this.vertices[i].x);
+        tempVerts.push(this.vertices[i].y);
+        tempVerts.push(this.vertices[i].z);
+    }
 
+    drawVerts = Float32Array.from(tempVerts);
+    drawIndices = Uint16Array.from(this.indices);
+
+    //Initialize shaders
     program = createProgramFromScripts(gl, "objectShader-vs", "objectShader-fs")
     gl.useProgram(program);
 
-    // Initialize shaders
-
-    drawVerts = Float32Array.from(this.vertices);
-    drawIndices = Uint16Array.from(this.indices);
 
     initArrayBuffer(gl, drawVerts, 3, gl.FLOAT, 'a_Position', program)
 
@@ -213,9 +241,13 @@ mySORClass.prototype.draw = function() {
 
     gl.enable(gl.DEPTH_TEST)
     var mvpMatrix = new Matrix4()
-    mvpMatrix.setOrtho(-500, 500, -500, 500, -5000, 5000)
+    // mvpMatrix.setOrtho(-500, 500, -500, 500, -5000, 5000)
+    mvpMatrix.setPerspective(30, canvas.width / canvas.height, 1, 10000);
+    mvpMatrix.lookAt(0, 0, 3000, 0, 0, 0, 0, 1, 0);
 
     gl.uniformMatrix4fv(u_MvpMatrix, false, mvpMatrix.elements)
     gl.drawElements(gl.TRIANGLES, drawIndices.length, gl.UNSIGNED_SHORT, 0)
+
+    if(this.showNormals){this.drawNormals()}
 
 }

@@ -32,10 +32,12 @@ lineCluster.prototype.draw = function() {
 
     gl.uniformMatrix4fv(u_Transforms, false, new Matrix4().setIdentity().elements)
     var u_Color = gl.getUniformLocation(program, 'u_Color')
-    gl.uniform4f(u_Color, 0.5, 0.5, 0.5, this.color[3])
+    gl.uniform4f(u_Color, this.color[0],this.color[1],this.color[2], this.color[3])
 
     var mvpMatrix = new Matrix4()
-    mvpMatrix.setOrtho(left + xPan, right + xPan, bottom + yPan, theTop + yPan, near + zPan, far + zPan)
+    // mvpMatrix.setOrtho(left + xPan, right + xPan, bottom + yPan, theTop + yPan, near + zPan, far + zPan)
+    mvpMatrix.setPerspective(30, canvas.width / canvas.height, 1, 10000);
+    mvpMatrix.lookAt(0, 0, 3000, 0, 0, 0, 0, 1, 0);
     gl.uniformMatrix4fv(u_MvpMatrix, false, mvpMatrix.elements)
     gl.drawElements(gl.LINES, this.indices.length, gl.UNSIGNED_SHORT, 0)
     gl.lineWidth(1);

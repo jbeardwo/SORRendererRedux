@@ -70,10 +70,9 @@ function drawModeClick(ev, gl, canvas) {
     if (button == 2) {
         penDown = 0;
         drawMode = false;
-        var testLine = new lineStrip(newSORPoints, [.5,.5,.5,1.0])
-        testLine.draw();
-        var test = new mySORClass("test",newSORPoints,[.5,.5,.5,1.0])
-        console.log(test)
+        var test = new mySORClass("test",newSORPoints,[.5,.5,.5,1.0]);
+        console.log(test);
+        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
         test.draw();
     }
 }
