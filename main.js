@@ -17,6 +17,10 @@ var xPan = 0
 var yPan = 0
 var zPan = 0
 
+
+var camera = new myCamera(new coord(0, 0, 3000),new coord(0,0,0),[0,1,0]);
+var scene = new myScene(camera);
+
 function main() {
 	gl.clearColor(1.0, 1.0, 1.0, 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
@@ -27,6 +31,30 @@ function main() {
             return false;
         }
     }, false)
+    
+    console.log(camera)
+    canvas.tabIndex = 1000;
+
+    canvas.onkeydown = function (ev)  {
+        console.log(ev)
+        //w
+        if(ev.which == 87){
+            camera.position.z -= 25
+        }
+        //s
+        if(ev.which == 83){
+            camera.position.z += 25
+        }
+        //a
+        if(ev.which == 65){
+            camera.position.x -= 25
+        }
+        //d
+        if(ev.which == 68){
+            camera.position.x += 25
+        }
+        scene.drawEverything();
+    }
 
     // Register function (event handler) to be called on a mouse press
     canvas.onmousedown = function(ev) {
@@ -73,8 +101,9 @@ function drawModeClick(ev, gl, canvas) {
         drawMode = false;
         var test = new mySORClass("test",newSORPoints,[0,1,0,1.0]);
         console.log(test);
-        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-        test.draw();
+        
+        scene.objects.push(test);
+        scene.drawEverything();
     }
 }
 

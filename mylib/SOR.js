@@ -258,12 +258,13 @@ mySORClass.prototype.draw = function() {
     var u_MvpMatrix = gl.getUniformLocation(program, 'u_MvpMatrix')
 
     gl.uniform4f(u_Color, this.color[0], this.color[1], this.color[2], this.color[3])    
-
     gl.enable(gl.DEPTH_TEST)
     var mvpMatrix = new Matrix4()
     // mvpMatrix.setOrtho(-500, 500, -500, 500, -5000, 5000)
     mvpMatrix.setPerspective(30, canvas.width / canvas.height, 1, 10000);
-    mvpMatrix.lookAt(0, 0, 3000, 0, 0, 0, 0, 1, 0);
+    mvpMatrix.lookAt(scene.camera.position.x, scene.camera.position.y, scene.camera.position.z,
+    				 scene.camera.lookAt.x, scene.camera.lookAt.y, scene.camera.lookAt.z,
+    				 scene.camera.up[0], scene.camera.up[1], scene.camera.up[2]);
 
     gl.uniformMatrix4fv(u_MvpMatrix, false, mvpMatrix.elements)
     gl.drawElements(gl.TRIANGLES, drawIndices.length, gl.UNSIGNED_SHORT, 0)
