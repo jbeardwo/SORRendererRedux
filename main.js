@@ -13,9 +13,6 @@ var bottom = -500
 var theTop = 500
 var near = -500
 var far = 500
-var xPan = 0
-var yPan = 0
-var zPan = 0
 
 
 var camera = new myCamera(new coord(0, 0, 3000),new coord(0,0,0),[0,1,0]);
@@ -39,19 +36,19 @@ function main() {
         console.log(ev)
         //w
         if(ev.which == 87){
-            camera.position.z -= 25
+            camera.position.z -= 50
         }
         //s
         if(ev.which == 83){
-            camera.position.z += 25
+            camera.position.z += 50
         }
         //a
         if(ev.which == 65){
-            camera.position.x -= 25
+            camera.position.x -= 50
         }
         //d
         if(ev.which == 68){
-            camera.position.x += 25
+            camera.position.x += 50
         }
         scene.drawEverything();
     }
@@ -104,6 +101,7 @@ function drawModeClick(ev, gl, canvas) {
         
         scene.objects.push(test);
         scene.drawEverything();
+        newSORPoints = [];
     }
 }
 

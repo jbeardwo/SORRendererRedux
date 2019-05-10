@@ -35,7 +35,7 @@ lineStrip.prototype.draw = function() {
     gl.uniform4f(u_Color, 0.5, 0.5, 0.5, this.color[3])
 
     var mvpMatrix = new Matrix4()
-    mvpMatrix.setOrtho(left + xPan, right + xPan, bottom + yPan, theTop + yPan, near + zPan, far + zPan)
+    mvpMatrix.setOrtho(left, right,bottom , theTop, near, far)
     gl.uniformMatrix4fv(u_MvpMatrix, false, mvpMatrix.elements)
     gl.drawElements(gl.LINE_STRIP, this.indices.length, gl.UNSIGNED_SHORT, 0)
     gl.lineWidth(1);
