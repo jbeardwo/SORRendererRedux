@@ -20,6 +20,7 @@ function mySORClass(name, baseLine, color) {
 
     this.faceNormals = this.calcFaceNormals();
     this.smoothNormals = this.calcSmoothNormals();
+    this.flatNormals = this.calcFlatNormals();
     this.showNormals = true;
 }
 
@@ -233,6 +234,18 @@ mySORClass.prototype.calcSmoothNormals = function() {
     smoothNormals.push(currentNormal);
 
     return smoothNormals;
+}
+
+mySORClass.prototype.calcFlatNormals = function() {
+	var flatNormals = [];
+	for(var i = 0; i< this.faceNormals.length;i++){
+		for(var j = 0; j<4; j++){
+			flatNormals.push(this.faceNormals[i]);
+		}
+	}
+	console.log(this.flatVertices)
+	console.log(flatNormals)
+	return flatNormals
 }
 
 mySORClass.prototype.drawNormals = function() {
