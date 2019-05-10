@@ -25,12 +25,20 @@ function mySORClass(name, baseLine, color) {
 
 mySORClass.prototype.formatBaseLine = function() {
     var baseLine = this.rawBaseLine;
+    var coordLine = [];
+    var x;
+    var y;
+    var z;
     for(var i = 0;i<baseLine.length;i = i+3){
         if(baseLine[i]<0){
             baseLine[i] = baseLine[i]*-1;
         }
+        x = baseLine[i];
+        y = baseLine[i+1];
+        z = baseLine[i+2];
+        coordLine.push(new coord(x,y,z));
     }
-    return baseLine;
+    return coordLine;
 }
 
 mySORClass.prototype.generateSOR = function() {
@@ -44,11 +52,10 @@ mySORClass.prototype.generateSOR = function() {
     for (var angle = 0; angle <= 360; angle += 10) {
         radians = ((angle * Math.PI) / 180)
         currentLine = []
-        for (var i = 0; i < this.baseLine.length; i=i+3) {
-            this.baseLine[i]
-            x = (Math.cos(radians) * this.baseLine[i]) - (Math.sin(radians) * this.baseLine[i+2]);
-            y = this.baseLine[i+1];
-            z = (Math.cos(radians) * this.baseLine[i+2]) + (Math.sin(radians) * this.baseLine[i]);
+        for (var i = 0; i < this.baseLine.length; i++) {
+            x = (Math.cos(radians) * this.baseLine[i].x) - (Math.sin(radians) * this.baseLine[i].z);
+            y = this.baseLine[i].y;
+            z = (Math.cos(radians) * this.baseLine[i].z) + (Math.sin(radians) * this.baseLine[i].x);
             currentLine.push(new coord(x, y, z));
         }
         shape.push(currentLine)
@@ -81,20 +88,18 @@ mySORClass.prototype.calcIndices = function() {
 mySORClass.prototype.calcFlatVertices = function() {
 	var flatVertices = [];
 	for(var i = 0; i< this.shape.length-1; i++){
-		for(var j = 0; j< this.baseLine.length/3-1;j++){
+		for(var j = 0; j< this.baseLine.length-1;j++){
 			flatVertices.push(this.shape[i][j]);
 			flatVertices.push(this.shape[i][j+1]);
 			flatVertices.push(this.shape[i+1][j+1]);
 			flatVertices.push(this.shape[i+1][j]);
 		}
 	}
-	console.log(flatVertices)
 	return flatVertices;
 }
 
 mySORClass.prototype.calcFlatIndices = function() {
-	for(var i = 0; i< this.shape.length-1; i++){
-		for(var j = 0; j< this.baseLine.length/3-1;j++){
+
 }
 
 mySORClass.prototype.calcFaceNormals = function() {
@@ -104,7 +109,7 @@ mySORClass.prototype.calcFaceNormals = function() {
         for (var j = 0; j < this.shape[0].length - 1; j++) {
             var currentLine = this.shape[i]
             var nextLine = this.shape[i + 1]
-            if(this.baseLine[j*3+1]>this.baseLine[(j+1)*3+1]){
+            if(this.baseLine[j].y>this.baseLine[j+1].y){
                 currentNormal = normalize(calculateNormal(currentLine[j], nextLine[j], currentLine[j+1]));
             }else{
                 currentNormal = normalize(calculateNormal(currentLine[j], currentLine[j+1], nextLine[j]));
@@ -120,7 +125,7 @@ mySORClass.prototype.calcSmoothNormals = function() {
     var smoothNormals = [];
     var currentNormal = [];
     var addedNormal = [];
-    var baseSize = this.baseLine.length/3;
+    var baseSize = this.baseLine.length;
     //Vertex normal for smooth shading is calculating by adding Normals of all adjascent faces
 
 
