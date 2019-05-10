@@ -99,7 +99,14 @@ mySORClass.prototype.calcFlatVertices = function() {
 }
 
 mySORClass.prototype.calcFlatIndices = function() {
-
+	var flatIndices = [];
+	for(var i = 0; i< this.shape.length-1; i++){
+		for(var j = 0; j< this.baseLine.length-1;j++){
+			flatIndices.push(4*(i+j),4*(i+j)+1,4*(i+j)+2);
+			flatIndices.push(4*(i+j),4*(i+j)+2,4*(i+j)+3);
+		}
+	}
+	return flatIndices;
 }
 
 mySORClass.prototype.calcFaceNormals = function() {
