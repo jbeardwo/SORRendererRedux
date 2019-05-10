@@ -29,11 +29,9 @@ function main() {
         }
     }, false)
     
-    console.log(camera)
     canvas.tabIndex = 1000;
 
     canvas.onkeydown = function (ev)  {
-        console.log(ev)
         //w
         if(ev.which == 87){
             camera.position.z -= 50

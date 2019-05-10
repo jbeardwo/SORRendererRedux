@@ -14,6 +14,10 @@ function mySORClass(name, baseLine, color) {
     this.vertices = this.calcVertices();
     this.indices = this.calcIndices();
 
+    this.flatVertices = this.calcFlatVertices();
+    this.flatIndices = this.calcFlatIndices();
+
+
     this.faceNormals = this.calcFaceNormals();
     this.smoothNormals = this.calcSmoothNormals();
     this.showNormals = true;
@@ -53,16 +57,10 @@ mySORClass.prototype.generateSOR = function() {
 }
 
 mySORClass.prototype.calcVertices = function() {
-    var x;
-    var y;
-    var z;
-    var vertices = []
+    var vertices = [];
     for(var i = 0; i < this.shape.length; i++) {
         for(var j = 0; j < this.shape[0].length; j++){
-            x = this.shape[i][j].x
-            y = this.shape[i][j].y
-            z = this.shape[i][j].z
-            vertices.push(new coord(x, y, z));
+            vertices.push(this.shape[i][j]);
         }
     }
     return vertices;
@@ -78,6 +76,25 @@ mySORClass.prototype.calcIndices = function() {
         }
     }
     return indices;
+}
+
+mySORClass.prototype.calcFlatVertices = function() {
+	var flatVertices = [];
+	for(var i = 0; i< this.shape.length-1; i++){
+		for(var j = 0; j< this.baseLine.length/3-1;j++){
+			flatVertices.push(this.shape[i][j]);
+			flatVertices.push(this.shape[i][j+1]);
+			flatVertices.push(this.shape[i+1][j+1]);
+			flatVertices.push(this.shape[i+1][j]);
+		}
+	}
+	console.log(flatVertices)
+	return flatVertices;
+}
+
+mySORClass.prototype.calcFlatIndices = function() {
+	for(var i = 0; i< this.shape.length-1; i++){
+		for(var j = 0; j< this.baseLine.length/3-1;j++){
 }
 
 mySORClass.prototype.calcFaceNormals = function() {
