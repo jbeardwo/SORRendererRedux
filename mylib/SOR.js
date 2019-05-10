@@ -6,7 +6,8 @@ function coord(x, y, z) {
 
 function mySORClass(name, baseLine, color) {
     this.name = name;
-    this.baseLine = baseLine;
+    this.rawBaseLine = baseLine;
+    this.baseLine = this.formatBaseLine();
     this.shape = this.generateSOR();
     this.color = color;
 
@@ -16,6 +17,16 @@ function mySORClass(name, baseLine, color) {
     this.faceNormals = this.calcFaceNormals();
     this.smoothNormals = this.calcSmoothNormals();
     this.showNormals = true;
+}
+
+mySORClass.prototype.formatBaseLine = function() {
+    var baseLine = this.rawBaseLine;
+    for(var i = 0;i<baseLine.length;i = i+3){
+        if(baseLine[i]<0){
+            baseLine[i] = baseLine[i]*-1;
+        }
+    }
+    return baseLine;
 }
 
 mySORClass.prototype.generateSOR = function() {
@@ -71,16 +82,17 @@ mySORClass.prototype.calcIndices = function() {
 
 mySORClass.prototype.calcFaceNormals = function() {
     var faceNormals = [];
+    var currentNormal = [];
     for (var i = 0; i < this.shape.length - 1; i++) {
         for (var j = 0; j < this.shape[0].length - 1; j++) {
             var currentLine = this.shape[i]
             var nextLine = this.shape[i + 1]
-            console.log(this.baseLine)
             if(this.baseLine[j*3+1]>this.baseLine[(j+1)*3+1]){
-                faceNormals.push(normalize(calculateNormal(currentLine[j], nextLine[j], currentLine[j+1])))
+                currentNormal = normalize(calculateNormal(currentLine[j], nextLine[j], currentLine[j+1]));
             }else{
-                faceNormals.push(normalize(calculateNormal(currentLine[j], currentLine[j+1], nextLine[j])))
+                currentNormal = normalize(calculateNormal(currentLine[j], currentLine[j+1], nextLine[j]));
             }
+            faceNormals.push(currentNormal);
         }
     }
     return faceNormals

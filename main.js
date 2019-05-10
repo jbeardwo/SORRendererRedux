@@ -60,6 +60,7 @@ function drawModeClick(ev, gl, canvas) {
     
     x = ((x - rect.left) - canvas.width / 2) * 2;
     y = (canvas.height / 2 - (y - rect.top)) * 2;
+
     
     // Store the coordinates to newSORPoints array
     newSORPoints.push(x);
@@ -90,6 +91,8 @@ function drawModeMove(ev, gl, canvas) {
 
         x = ((x - rect.left) - canvas.width / 2) * 2;
     	y = (canvas.height / 2 - (y - rect.top)) * 2;
+
+
 
         /*
         The elements up to newSORPoints.length are the coordinates of points which have
