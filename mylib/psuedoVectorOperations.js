@@ -43,6 +43,12 @@ function calculateNormal(pt0, pt1, pt2) {
 }
 
 function vector3ToCoord(vector){
-    var coord = new coord(vector[0],vector[1],vector[2]);
-    return coord;
+    var coordinate = new coord(vector[0],vector[1],vector[2]);
+    return coordinate;
+}
+
+function degreesToRadians(angle){
+    var radians;
+    radians = ((angle * Math.PI) / 180)
+    return radians;
 }

@@ -1,15 +1,3 @@
-function coord(x, y, z) {
-    this.x = x;
-    this.y = y;
-    this.z = z;
-}
-
-coord.prototype.toVector3 = function() {
-    var vector = [];
-    vector.push(this.x,this.y,this.z)
-    return vector;
-}
-
 function mySORClass(name, baseLine, color) {
     this.name = name;
     this.rawBaseLine = baseLine;
@@ -58,7 +46,7 @@ mySORClass.prototype.generateSOR = function() {
     var shape = []; //a completed shape is 36 lines, each are their own array
 
     for (var angle = 0; angle <= 360; angle += 10) {
-        radians = ((angle * Math.PI) / 180)
+        radians = degreesToRadians(angle);
         currentLine = []
         for (var i = 0; i < this.baseLine.length; i++) {
             x = (Math.cos(radians) * this.baseLine[i].x) - (Math.sin(radians) * this.baseLine[i].z);
@@ -322,9 +310,11 @@ mySORClass.prototype.draw = function() {
     var mvpMatrix = new Matrix4()
     // mvpMatrix.setOrtho(-500, 500, -500, 500, -5000, 5000)
     mvpMatrix.setPerspective(30, canvas.width / canvas.height, 1, 10000);
-    mvpMatrix.lookAt(scene.camera.position.x, scene.camera.position.y, scene.camera.position.z,
-    				 scene.camera.lookAt.x, scene.camera.lookAt.y, scene.camera.lookAt.z,
-    				 scene.camera.up[0], scene.camera.up[1], scene.camera.up[2]);
+    console.log(camera)
+
+    mvpMatrix.lookAt(scene.camera.position[0], scene.camera.position[1], scene.camera.position[2],
+    				 scene.camera.lookAt[0], scene.camera.lookAt[1], scene.camera.lookAt[2],
+    				 scene.camera.cameraUp[0], scene.camera.cameraUp[1], scene.camera.cameraUp[2]);
 
     gl.uniformMatrix4fv(u_MvpMatrix, false, mvpMatrix.elements)
     gl.drawElements(gl.TRIANGLES, drawIndices.length, gl.UNSIGNED_SHORT, 0)

@@ -1,14 +1,35 @@
-function myCamera(position, lookAt, worldUp){
+function myCamera(position, worldUp){
+	this.origin = [0,0,0]
 	this.position = position.toVector3();
-	this.lookAt = lookAt.toVector3();
-	this.worldUp = normalize(worldUp.toVector3());
-	this.cameraDirection = getDirection(position, lookAt);
-	this.cameraRight = calculateNormal(vector3ToCoord(worldUp),vector3ToCoord(cameraDirection));
-	this.cameraUp = calculateNormal(vector3ToCoord(cameraDirection),vector3ToCoord(cameraRight));
+	this.worldUp = normalize(worldUp);
+	this.cameraFront = [0,0,-1]
+	this.cameraRight = calculateNormal(vector3ToCoord(this.origin),vector3ToCoord(this.cameraFront),vector3ToCoord(this.worldUp));
+	this.cameraUp = calculateNormal(vector3ToCoord(this.origin),vector3ToCoord(this.cameraRight),vector3ToCoord(this.cameraFront));
+	this.lookAt = addVectors(this.position,this.cameraFront);
+	this.pitch = 0;
+	this.yaw = 0;
+	this.roll = 0;
 }
 
-myCamera.prototype.getDirection = function(position, lookAt) {
-	var direction = [];
-	direction.push(position.x-lookAt.x,position.y-lookAt.y,position.z-lookAt.z)
-	return normalize(direction);
+myCamera.prototype.getFront = function() {
+	var front = [];
+	for(var i = 0;i<3;i++){
+		front.push(this.lookAt[i]-this.position[i]);
+	}
+	return normalize(front);
+}
+
+myCamera.prototype.updatePosition = function(newPosition){
+	this.position = newPosition;
+	this.lookAt = addVectors(this.position,this.cameraFront)
+}
+
+myCamera.prototype.updateFront = function(){
+	console.log(this.pitch)
+	console.log(this.yaw)
+	this.cameraFront[0] = Math.cos(degreesToRadians(this.pitch)) * Math.cos(degreesToRadians(this.yaw));
+	this.cameraFront[1] = Math.sin(degreesToRadians(this.pitch));
+	this.cameraFront[2] = Math.cos(degreesToRadians(this.pitch)) * Math.sin(degreesToRadians(this.yaw));
+	this.cameraFront = normalize(this.cameraFront);
+	this.lookAt = addVectors(this.position, this.cameraFront)
 }

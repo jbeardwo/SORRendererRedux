@@ -13,9 +13,11 @@ var bottom = -500
 var theTop = 500
 var near = -500
 var far = 500
+var moveSpeed = 50;
+var turnSpeed = 5;
 
 
-var camera = new myCamera(new coord(0, 1000, 3000),new coord(0,0,0),[0,1,0]);
+var camera = new myCamera(new coord(0, 0, 3000),[0,1,0]);
 var scene = new myScene(camera);
 
 function main() {
@@ -32,21 +34,62 @@ function main() {
     canvas.tabIndex = 1000;
 
     canvas.onkeydown = function (ev)  {
+    	pos = scene.camera.position;
         //w
         if(ev.which == 87){
-            camera.position.z -= 50
+        	for(var i = 0;i<3;i++){
+            	pos[i] += moveSpeed * scene.camera.cameraFront[i];
+            }
+            scene.camera.updatePosition(pos);
         }
         //s
         if(ev.which == 83){
-            camera.position.z += 50
+        	for(var i = 0;i<3;i++){
+            	scene.camera.position[i] -= moveSpeed * scene.camera.cameraFront[i];
+            }
+            scene.camera.updatePosition(pos);
         }
         //a
         if(ev.which == 65){
-            camera.position.x -= 50
+        	for(var i = 0;i<3;i++){
+            	scene.camera.position[i] -= moveSpeed * scene.camera.cameraRight[i];
+            }
+            scene.camera.updatePosition(pos);
         }
         //d
         if(ev.which == 68){
-            camera.position.x += 50
+        	for(var i = 0;i<3;i++){
+            	scene.camera.position[i] += moveSpeed * scene.camera.cameraRight[i];
+            }
+            scene.camera.updatePosition(pos);
+        }
+        //up
+        if(ev.which == 38){
+        	for(var i = 0;i<3;i++){
+            	scene.camera.pitch += turnSpeed
+            }
+            scene.camera.updateFront();
+        }
+        //down
+        if(ev.which == 40){
+        	for(var i = 0;i<3;i++){
+            	scene.camera.pitch -= turnSpeed
+            }
+            scene.camera.updateFront();
+        }
+        //left
+        if(ev.which == 37){
+        	for(var i = 0;i<3;i++){
+            	scene.camera.yaw -= turnSpeed
+            }
+            scene.camera.updateFront();
+        }
+        //right
+        if(ev.which == 39){
+        	for(var i = 0;i<3;i++){
+            	scene.camera.yaw -= turnSpeed
+            }
+            scene.camera.updateFront();
         }
         scene.drawEverything();
     }
