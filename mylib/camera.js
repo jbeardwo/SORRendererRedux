@@ -25,11 +25,11 @@ myCamera.prototype.updatePosition = function(newPosition){
 }
 
 myCamera.prototype.updateFront = function(){
-	console.log(this.pitch)
-	console.log(this.yaw)
+	console.log(degreesToRadians(this.pitch))
 	this.cameraFront[0] = Math.cos(degreesToRadians(this.pitch)) * Math.cos(degreesToRadians(this.yaw));
 	this.cameraFront[1] = Math.sin(degreesToRadians(this.pitch));
 	this.cameraFront[2] = Math.cos(degreesToRadians(this.pitch)) * Math.sin(degreesToRadians(this.yaw));
 	this.cameraFront = normalize(this.cameraFront);
-	this.lookAt = addVectors(this.position, this.cameraFront)
+	console.log(this.cameraFront)
+	this.lookAt = normalize(addVectors(this.position, this.cameraFront))
 }

@@ -310,7 +310,6 @@ mySORClass.prototype.draw = function() {
     var mvpMatrix = new Matrix4()
     // mvpMatrix.setOrtho(-500, 500, -500, 500, -5000, 5000)
     mvpMatrix.setPerspective(30, canvas.width / canvas.height, 1, 10000);
-    console.log(camera)
 
     mvpMatrix.lookAt(scene.camera.position[0], scene.camera.position[1], scene.camera.position[2],
     				 scene.camera.lookAt[0], scene.camera.lookAt[1], scene.camera.lookAt[2],
