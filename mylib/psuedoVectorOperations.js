@@ -41,3 +41,8 @@ function calculateNormal(pt0, pt1, pt2) {
     }
     return crossProd
 }
+
+function vector3ToCoord(vector){
+    var coord = new coord(vector[0],vector[1],vector[2]);
+    return coord;
+}

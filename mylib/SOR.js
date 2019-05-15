@@ -4,6 +4,12 @@ function coord(x, y, z) {
     this.z = z;
 }
 
+coord.prototype.toVector3 = function() {
+    var vector = [];
+    vector.push(this.x,this.y,this.z)
+    return vector;
+}
+
 function mySORClass(name, baseLine, color) {
     this.name = name;
     this.rawBaseLine = baseLine;
@@ -284,8 +290,6 @@ mySORClass.prototype.draw = function() {
         drawVerts = Float32Array.from(tempVerts);
         drawIndices = Uint16Array.from(this.flatIndices);
         drawNormals = vector3ToFloat32(this.flatNormals);
-        console.log(this.flatVertices)
-        console.log(this.flatIndices)
     }else{
         //convert vertices from coords into a normal array
         for(var i = 0;i<this.vertices.length;i++){
