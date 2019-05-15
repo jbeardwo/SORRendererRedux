@@ -16,6 +16,7 @@ function mySORClass(name, baseLine, color) {
 
     this.flatVertices = this.calcFlatVertices();
     this.flatIndices = this.calcFlatIndices();
+    this.drawFlat = true;
 
 
     this.faceNormals = this.calcFaceNormals();
@@ -103,8 +104,8 @@ mySORClass.prototype.calcFlatIndices = function() {
 	var flatIndices = [];
 	for(var i = 0; i< this.shape.length-1; i++){
 		for(var j = 0; j< this.baseLine.length-1;j++){
-			flatIndices.push(4*(i+j),4*(i+j)+1,4*(i+j)+2);
-			flatIndices.push(4*(i+j),4*(i+j)+2,4*(i+j)+3);
+			flatIndices.push((i*(this.baseLine.length-1)+j)*4,(i*(this.baseLine.length-1)+j)*4+1,(i*(this.baseLine.length-1)+j)*4+2);
+			flatIndices.push((i*(this.baseLine.length-1)+j)*4,(i*(this.baseLine.length-1)+j)*4+2,(i*(this.baseLine.length-1)+j)*4+3);
 		}
 	}
 	return flatIndices;
@@ -243,8 +244,6 @@ mySORClass.prototype.calcFlatNormals = function() {
 			flatNormals.push(this.faceNormals[i]);
 		}
 	}
-	console.log(this.flatVertices)
-	console.log(flatNormals)
 	return flatNormals
 }
 
@@ -273,17 +272,32 @@ mySORClass.prototype.draw = function() {
     var tempVerts = [];
     var drawIndices = [];
     var drawNormals = [];
-//convert vertices from coords into a normal array
-    for(var i = 0;i<this.vertices.length;i++){
-        tempVerts.push(this.vertices[i].x);
-        tempVerts.push(this.vertices[i].y);
-        tempVerts.push(this.vertices[i].z);
+
+    if(this.drawFlat){
+        //convert vertices from coords into a normal array
+        for(var i = 0;i<this.flatVertices.length;i++){
+            tempVerts.push(this.flatVertices[i].x);
+            tempVerts.push(this.flatVertices[i].y);
+            tempVerts.push(this.flatVertices[i].z);
+        }
+
+        drawVerts = Float32Array.from(tempVerts);
+        drawIndices = Uint16Array.from(this.flatIndices);
+        drawNormals = vector3ToFloat32(this.flatNormals);
+        console.log(this.flatVertices)
+        console.log(this.flatIndices)
+    }else{
+        //convert vertices from coords into a normal array
+        for(var i = 0;i<this.vertices.length;i++){
+            tempVerts.push(this.vertices[i].x);
+            tempVerts.push(this.vertices[i].y);
+            tempVerts.push(this.vertices[i].z);
+        }
+
+        drawVerts = Float32Array.from(tempVerts);
+        drawIndices = Uint16Array.from(this.indices);
+        drawNormals = vector3ToFloat32(this.smoothNormals);
     }
-
-    drawVerts = Float32Array.from(tempVerts);
-    drawIndices = Uint16Array.from(this.indices);
-    drawNormals = vector3ToFloat32(this.smoothNormals);
-
     //Initialize shaders
     program = createProgramFromScripts(gl, "objectShader-vs", "objectShader-fs")
     gl.useProgram(program);
