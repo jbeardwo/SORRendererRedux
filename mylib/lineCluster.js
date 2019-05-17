@@ -36,10 +36,8 @@ lineCluster.prototype.draw = function() {
 
     var mvpMatrix = new Matrix4()
     // mvpMatrix.setOrtho(left + xPan, right + xPan, bottom + yPan, theTop + yPan, near + zPan, far + zPan)
-    mvpMatrix.setPerspective(30, canvas.width / canvas.height, 1, 10000);
-    mvpMatrix.lookAt(scene.camera.position[0], scene.camera.position[1], scene.camera.position[2],
-                     scene.camera.lookAt[0], scene.camera.lookAt[1], scene.camera.lookAt[2],
-                     scene.camera.cameraUp[0], scene.camera.cameraUp[1], scene.camera.cameraUp[2]);
+    
+    mvpMatrix =  scene.camera.getViewMatrix();
     gl.uniformMatrix4fv(u_MvpMatrix, false, mvpMatrix.elements)
     gl.drawElements(gl.LINES, this.indices.length, gl.UNSIGNED_SHORT, 0)
     gl.lineWidth(1);

@@ -309,11 +309,9 @@ mySORClass.prototype.draw = function() {
     gl.enable(gl.DEPTH_TEST)
     var mvpMatrix = new Matrix4()
     // mvpMatrix.setOrtho(-500, 500, -500, 500, -5000, 5000)
-    mvpMatrix.setPerspective(30, canvas.width / canvas.height, 1, 10000);
+    mvpMatrix =  scene.camera.getViewMatrix();
 
-    mvpMatrix.lookAt(scene.camera.position[0], scene.camera.position[1], scene.camera.position[2],
-    				 scene.camera.lookAt[0], scene.camera.lookAt[1], scene.camera.lookAt[2],
-    				 scene.camera.cameraUp[0], scene.camera.cameraUp[1], scene.camera.cameraUp[2]);
+   
 
     gl.uniformMatrix4fv(u_MvpMatrix, false, mvpMatrix.elements)
     gl.drawElements(gl.TRIANGLES, drawIndices.length, gl.UNSIGNED_SHORT, 0)
