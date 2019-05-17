@@ -1,8 +1,7 @@
 function myCamera(position, worldUp){
-	this.origin = [0,0,0]
 	this.position = position.toVector3();
 	this.cameraFront = [0,0,-1]
-	this.worldUp = normalize(worldUp);
+	this.worldUp = [0,1,0];
 	this.cameraUp = [];
 	this.cameraRight = [];
 	this.pitch = 0;
@@ -44,7 +43,6 @@ myCamera.prototype.updatePosition = function(direction){
             }
 	}
 	this.updateVectors();
-	console.log(this.position)
 
 }
 
@@ -59,6 +57,6 @@ myCamera.prototype.updateVectors = function(){
 	this.cameraFront[1] = Math.sin(degreesToRadians(this.pitch));
 	this.cameraFront[2] = Math.cos(degreesToRadians(this.pitch)) * Math.sin(degreesToRadians(this.yaw));
 	this.cameraFront = normalize(this.cameraFront);
-	this.cameraRight = calculateNormal(vector3ToCoord(this.origin),vector3ToCoord(this.cameraFront),vector3ToCoord(this.worldUp));
-	this.cameraUp = calculateNormal(vector3ToCoord(this.origin),vector3ToCoord(this.cameraRight),vector3ToCoord(this.cameraFront));
+	this.cameraRight = vectorCalcNormal(this.cameraFront,this.worldUp);
+	this.cameraUp = vectorCalcNormal(this.cameraRight,this.cameraFront);
 }

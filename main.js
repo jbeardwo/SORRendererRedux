@@ -15,7 +15,7 @@ var near = -500
 var far = 500
 
 
-var camera = new myCamera(new coord(0, 0, 3000),[0,1,0]);
+var camera = new myCamera(new coord(0, 0, 3000));
 var scene = new myScene(camera);
 
 function main() {

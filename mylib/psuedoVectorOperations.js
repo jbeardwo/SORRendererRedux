@@ -42,6 +42,19 @@ function calculateNormal(pt0, pt1, pt2) {
     return crossProd
 }
 
+function vectorCalcNormal(vec0,vec1) {
+    var cross0 = vec0
+    var cross1 = vec1
+    var crossProd = []
+
+    crossProd = [cross0[1] * cross1[2] - cross0[2] * cross1[1], cross0[2] * cross1[0] - cross0[0] * cross1[2], cross0[0] * cross1[1] - cross0[1] * cross1[0]]
+    var magnitude = Math.sqrt(Math.pow(crossProd[0], 2) + Math.pow(crossProd[1], 2) + Math.pow(crossProd[2], 2))
+    for (var k = 0; k < 3; k++) {
+        crossProd[k] = (crossProd[k] / magnitude)
+    }
+    return crossProd
+}
+
 function vector3ToCoord(vector){
     var coordinate = new coord(vector[0],vector[1],vector[2]);
     return coordinate;
