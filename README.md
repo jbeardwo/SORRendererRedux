@@ -4,7 +4,7 @@ A real-time 3D WebGL application that allows users to create and manipulate surf
 
 ---
 
-## 🛠 Features
+##  Features
 
 - **Interactive Shape Creation**:  
   - Click **“Create New SOR”** to begin.  
@@ -27,7 +27,7 @@ A real-time 3D WebGL application that allows users to create and manipulate surf
 
 ---
 
-## 🚧 Status & Notes
+##  Status & Notes
 
 - **Work-in-progress rewrite**:  
   This is a reimplementation of an earlier version from a university course. The new structure improves organization and readability.
@@ -40,7 +40,7 @@ A real-time 3D WebGL application that allows users to create and manipulate surf
 
 ---
 
-## 🔧 Tech Stack
+##  Tech Stack
 
 - WebGL / JavaScript  
 - Linear algebra from acuon-matrix.js
@@ -48,7 +48,7 @@ A real-time 3D WebGL application that allows users to create and manipulate surf
 
 ---
 
-## 🧠 Educational Purpose
+##  Educational Purpose
 
 This project helped reinforce:
 - Geometry and vector math (rotations, transformations)
@@ -57,13 +57,13 @@ This project helped reinforce:
 
 ---
 
-## 📷 Screenshots
+##  Screenshots
 
 ![App Screenshot](SORSample.png)
 
 ---
 
-## 🚀 Try It Out
+##  Try It Out
 
 You can clone the repo and open `index.html` in a browser that supports WebGL.
 Or go to https://jbeardwo.github.io/SORRenderer/driver.html
